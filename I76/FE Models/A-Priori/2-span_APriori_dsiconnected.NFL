@@ -1,0 +1,198 @@
+ ____________________________________________ 
+*Solution commenced on 07/06/2016 at 10:54:12 
+  
+ Strand7 [2.4.6][Solver Build: 24141222] (32-Bit) 
+  
+ ANALYSIS TYPE               : NATURAL FREQUENCY 
+  
+ COMPUTER NAME               : JBB-LAPTOP 
+ USER LOGON NAME             : John 
+ CPU                         : Intel(R) Core(TM) i7-4600U CPU @ 2.10GHz 
+ USABLE PHYSICAL MEMORY      : 4.0 GB 
+ USABLE VIRTUAL MEMORY       : 3.0 GB 
+  
+ MODEL FILE                  : "C:\Users\John\Documents\RutgersResearch\Virtual Lab\I76\FE Models\A-Priori\2-span_APriori_dsiconnected.st7" 
+ RESULT FILE                 : "C:\Users\John\Documents\RutgersResearch\Virtual Lab\I76\FE Models\A-Priori\2-span_APriori_dsiconnected.NFA" 
+ SCRATCH PATH                : "C:\Users\John\Strand7\Tmp\" 
+  
+ TOTALS 
+ Nodes                       : 1875 
+ Beams                       :  916 
+ Plates                      : 1760 
+ Bricks                      :    0 
+ Links                       :    0 
+  
+ SOLVER UNITS 
+ Length                      : in 
+ Mass                        : lbm 
+ Force                       : lbf 
+ Stress                      : psi 
+  
+ FREEDOM CASE                : "Freedom Case 1" 
+  
+ MASS MATRIX OPTION 
+ Beam Elements               : Lumped 
+ Plate Elements              : Lumped 
+ Global Matrix               : Full (for off-diagonal terms) 
+ Non-Structural Mass         : Added (from the following cases) 
+                             : "Load Case 1" 
+  
+ STORAGE SCHEME              : Sparse  
+ SORTING METHOD              : AMD  
+  
+ NUMBER OF EQUATIONS         : 11241 
+ MATRIX FILL-IN              : 78.1% 
+ [K] MATRIX SIZE             : 10.4 MB 
+ [M] MATRIX SIZE             : 2.3 MB 
+ OPTIMUM RAM NEEDED          : 3.6 MB 
+ FREE SCRATCH SPACE          : 80.9 GB 
+  
+ Reducing 11241 Equations (Using 10.4 MB RAM)... 
+  
+ MAXIMUM PIVOT               : 5.894258E+12 (Node 11 RX) 
+ MINIMUM PIVOT               : 9.115959E+04 (Node 1810 DZ) 
+  
+ NODAL DISPLACEMENT COMPONENTS USED IN STARTING VECTOR 
+     701[RX]      673[RX]      672[RX]      670[RX]      681[RX]      731[RX]  
+     678[RX]      667[RX]      703[RX]      710[RX]      707[RX]      730[RX]  
+     736[RX]      735[RX]      694[RX]  
+  
+ SUBSPACE ITERATION 
+ Natural Frequencies         : 10  
+ Mass Degrees of Freedom     : 8085 
+ Subspace Dimension          : 16 
+ Convergence Tolerance       : 1.000000E-05 
+ Frequency Shift             : 0.000000E+00 Hz 
+  
+ ITERATION 1 
+ Current Frequencies (Hz) 
+  1.14372E+00  7.23860E+00  1.00295E+01  1.65197E+01  1.80677E+01  2.14356E+01 
+  2.24391E+01  2.35479E+01  2.39040E+01  2.48963E+01  2.51978E+01  2.53726E+01 
+  2.65374E+01  2.67554E+01  2.72782E+01  2.93324E+01 
+  
+ ITERATION 2 
+ Current Frequencies (Hz) 
+  7.87734E-01  2.49235E+00  2.73902E+00  3.31693E+00  6.70505E+00  7.90591E+00 
+  1.05604E+01  1.32587E+01  1.62328E+01  1.79082E+01  2.01839E+01  2.21823E+01 
+  2.37750E+01  2.48785E+01  2.59918E+01  2.65265E+01 
+ Relative Difference [Converged: 0] 
+  4.51913E-01  1.90433E+00  2.66170E+00  3.98042E+00  1.69464E+00  1.71134E+00 
+  1.12484E+00  7.76034E-01  4.72569E-01  3.90217E-01  2.48412E-01  1.43824E-01 
+  1.16188E-01  7.54397E-02  4.94900E-02  1.05777E-01 
+  
+ ITERATION 3 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.08167E+00  2.32907E+00  2.77319E+00  3.00965E+00  3.24064E+00 
+  4.25208E+00  6.57870E+00  7.27863E+00  7.78136E+00  9.05825E+00  1.56878E+01 
+  1.85841E+01  2.07192E+01  2.21094E+01  2.49384E+01 
+ Relative Difference [Converged: 0] 
+  7.38672E-04  1.97284E-01  1.76016E-01  1.96071E-01  1.22785E+00  1.43961E+00 
+  1.48357E+00  1.01540E+00  1.23021E+00  1.30142E+00  1.22823E+00  4.13985E-01 
+  2.79317E-01  2.00751E-01  1.75602E-01  6.36816E-02 
+  
+ ITERATION 4 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04717E+00  2.32805E+00  2.71170E+00  2.93851E+00  3.18200E+00 
+  3.28397E+00  5.04898E+00  5.62589E+00  5.91385E+00  6.96329E+00  7.17641E+00 
+  7.71356E+00  8.66014E+00  1.46714E+01  1.86075E+01 
+ Relative Difference [Converged: 1] 
+  3.02607E-07  1.68481E-02  4.38971E-04  2.26746E-02  2.42093E-02  1.84287E-02 
+  2.94800E-01  3.02975E-01  2.93774E-01  3.15785E-01  3.00858E-01  1.18602E+00 
+  1.40928E+00  1.39247E+00  5.06966E-01  3.40233E-01 
+  
+ ITERATION 5 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93554E+00  3.18004E+00 
+  3.26768E+00  4.94877E+00  5.29711E+00  5.51361E+00  5.82537E+00  6.15715E+00 
+  6.95243E+00  7.14339E+00  7.68282E+00  1.56275E+01 
+ Relative Difference [Converged: 2] 
+  8.05694E-12  2.72440E-05  3.24933E-06  1.04919E-04  1.01266E-03  6.14222E-04 
+  4.98490E-03  2.02505E-02  6.20672E-02  7.25910E-02  1.95339E-01  1.65542E-01 
+  1.09476E-01  2.12329E-01  9.09642E-01  1.90690E-01 
+  
+ ITERATION 6 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93549E+00  3.17995E+00 
+  3.26736E+00  4.94342E+00  5.22014E+00  5.33680E+00  5.69728E+00  5.96904E+00 
+  6.17151E+00  7.07299E+00  7.14077E+00  1.43775E+01 
+ Relative Difference [Converged: 4] 
+  4.23129E-16  5.59153E-08  1.13165E-08  3.70666E-07  1.86766E-05  3.03749E-05 
+  9.69733E-05  1.08230E-03  1.47445E-02  3.31302E-02  2.24824E-02  3.15130E-02 
+  1.26536E-01  9.95423E-03  7.59098E-02  8.69389E-02 
+  
+ ITERATION 7 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93549E+00  3.17995E+00 
+  3.26736E+00  4.94261E+00  5.19155E+00  5.32541E+00  5.68233E+00  5.91666E+00 
+  6.16069E+00  7.06798E+00  7.12975E+00  1.14079E+01 
+ Relative Difference [Converged: 7] 
+  2.39773E-15  2.24998E-10  5.53668E-11  3.38569E-09  1.53666E-07  3.75117E-07 
+  1.25083E-06  1.62467E-04  5.50831E-03  2.13982E-03  2.63072E-03  8.85443E-03 
+  1.75623E-03  7.08061E-04  1.54507E-03  2.60311E-01 
+  
+ ITERATION 8 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93549E+00  3.17995E+00 
+  3.26736E+00  4.94253E+00  5.18930E+00  5.32468E+00  5.68064E+00  5.91114E+00 
+  6.15958E+00  7.06716E+00  7.12613E+00  1.22471E+01 
+ Relative Difference [Converged: 7] 
+  1.26939E-15  1.17773E-12  4.10699E-13  5.14070E-11  1.21050E-09  4.30069E-09 
+  1.64764E-08  1.60897E-05  4.31943E-04  1.36141E-04  2.98939E-04  9.32804E-04 
+  1.81104E-04  1.17262E-04  5.09004E-04  6.85204E-02 
+  
+ ITERATION 9 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93549E+00  3.17995E+00 
+  3.26736E+00  4.94252E+00  5.18907E+00  5.32459E+00  5.68033E+00  5.91003E+00 
+  6.15933E+00  7.06678E+00  7.12444E+00  1.06723E+01 
+ Relative Difference [Converged: 8] 
+  7.05215E-16  2.38627E-15  2.67059E-15  8.59707E-13  1.50020E-11  8.04506E-11 
+  3.36219E-10  2.32115E-06  4.61108E-05  1.74000E-05  5.36039E-05  1.88255E-04 
+  3.96459E-05  5.31350E-05  2.37211E-04  1.47558E-01 
+  
+ ITERATION 10 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93549E+00  3.17995E+00 
+  3.26736E+00  4.94252E+00  5.18903E+00  5.32457E+00  5.68025E+00  5.90971E+00 
+  6.15926E+00  7.06654E+00  7.12352E+00  8.22569E+00 
+ Relative Difference [Converged: 10] 
+  1.41043E-16  1.51854E-15  3.05211E-15  1.21201E-14  2.19663E-13  1.75139E-12 
+  8.00048E-12  3.84980E-07  6.22566E-06  3.08077E-06  1.37958E-05  5.46503E-05 
+  1.13460E-05  3.33353E-05  1.28567E-04  2.97437E-01 
+  
+ ITERATION 11 
+ Current Frequencies (Hz) 
+  7.87153E-01  2.04712E+00  2.32804E+00  2.71142E+00  2.93549E+00  3.17995E+00 
+  3.26736E+00  4.94252E+00  5.18903E+00  5.32457E+00  5.68023E+00  5.90961E+00 
+  6.15924E+00  7.06639E+00  7.12301E+00  8.31878E+00 
+ Relative Difference [Converged: 10] 
+  4.23129E-16  4.55561E-15  1.90757E-15  2.78434E-15  7.56415E-16  3.71477E-14 
+  1.58207E-13  5.45896E-08  7.13311E-07  4.02107E-07  3.42852E-06  1.56870E-05 
+  3.63972E-06  2.23986E-05  7.16222E-05  1.11912E-02 
+  
+ THE FIRST 10 EIGENVALUES HAVE CONVERGED 
+  
+ FINAL FREQUENCY RESULTS 
+ Mode        Eigenvalue       Frequency (rad/s)    Frequency (Hz) 
+    1      2.44611899E+01      4.94582550E+00      7.87152576E-01 
+    2      1.65442062E+02      1.28624283E+01      2.04711905E+00 
+    3      2.13963872E+02      1.46275040E+01      2.32803956E+00 
+    4      2.90236875E+02      1.70363398E+01      2.71141770E+00 
+    5      3.40188550E+02      1.84442010E+01      2.93548576E+00 
+    6      3.99208248E+02      1.99801964E+01      3.17994702E+00 
+    7      4.21457031E+02      2.05294187E+01      3.26735846E+00 
+    8      9.64398315E+02      3.10547632E+01      4.94251906E+00 
+    9      1.06299697E+03      3.26036342E+01      5.18902955E+00 
+   10      1.11925491E+03      3.34552673E+01      5.32457116E+00 
+  
+ TOTAL CPU TIME              : 2.719 Seconds ( 0:00:03) 
+  
+*Solution completed on 07/06/2016 at 10:54:14 
+*Solution time: 3 Seconds 
+  
+ 
+*SUMMARY OF MESSAGES
+*Number of Notes    : 0
+*Number of Warnings : 0
+*Number of Errors   : 0
+ 
