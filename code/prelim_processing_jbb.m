@@ -5,8 +5,7 @@
 %   getpsd
 % 
 % jdv 07072016
-
-
+addpath(genpath('C:\Users\John\Projects_Git\vma'));
 % file info
 fname = 'C:\Users\John\Documents\RutgersResearch\Virtual Lab\I76\data\7.8.16\ambient_AM_1.txt';
 fname2 = 'C:\Users\John\Documents\RutgersResearch\Virtual Lab\I76\data\7.7.16\ambient4_sync.txt';
@@ -109,4 +108,19 @@ plot(decimate(data(:,1),10),decimate(data(:,3),10),'.');
 
 
 
+%% Plot pier 7 directional correlation
+figure
+plot(data(:,13),data(:,16))
 
+%% psd
+nAvg = 120;
+percOverlap = 85;
+nfft = []; % use default nfft lines
+refInd = [13 14 16];
+
+% get psd
+[cpxx,f] = getcpsd(data,refInd,nAvg,percOverlap,nfft,fs);
+[cpxx2,f2] = getcpsd(dat2,refInd,nAvg,percOverlap,nfft,fs);
+% figure
+plot(f,mag2db(pxx))
+legend(chanLabels);
