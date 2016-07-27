@@ -1,0 +1,776 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>I76 Ambient Vibration Monitoring - Data Processing</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-07-27"><meta name="DC.source" content="I76_Ambient_Processing.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>I76 Ambient Vibration Monitoring - Data Processing</h1><!--introduction--><p>John DeVitis July 28th, 2016</p><p>vma fcns called:   getrms   getpsd   getcpsd</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Superstructure Instrumentation Plan</a></li><li><a href="#2">Substructure Instrumentation</a></li><li><a href="#3">Load data files</a></li><li><a href="#4">Sampling Info</a></li><li><a href="#5">DOF Indices, Coordinates, &amp; Labels</a></li><li><a href="#6">Data Stats</a></li><li><a href="#7">Time Plots - Vertical DOF</a></li><li><a href="#8">Time Plots - Transverse DOF</a></li><li><a href="#9">Time Plots - Longitudinal DOF</a></li><li><a href="#10">Power Spectral Density (PSD) - Plot All</a></li><li><a href="#11">PSD - Plot Vertical</a></li><li><a href="#12">PSD - Plot Transverse</a></li><li><a href="#13">PSD - Plot Longitudinal</a></li></ul></div><h2>Superstructure Instrumentation Plan<a name="1"></a></h2><p><b>Note</b> the DOF call outs - they are also the channel numbers (column indices of the data array)</p><p><img vspace="5" hspace="5" src="instrumentation_superstructure.png" alt=""> </p><h2>Substructure Instrumentation<a name="2"></a></h2><p><b>Pier G6:</b></p><p><img vspace="5" hspace="5" src="instrumentation_pierG6.png" alt=""> </p><p><b>Pier G7:</b></p><p><img vspace="5" hspace="5" src="instrumentation_pierG7.png" alt=""> </p><h2>Load data files<a name="3"></a></h2><div><ul><li>Record starts at 1:16PM on July 27th, 2016</li><li>Video began at ~1:45PM</li><li>File names must be on Matlab's search path</li></ul></div><pre class="codeinput"><span class="comment">% list of file names (absolute path of where data is stored)</span>
+fnames = {<span class="string">'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3.txt'</span>;<span class="keyword">...</span>
+          <span class="string">'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_01.txt'</span>;<span class="keyword">...</span>
+          <span class="string">'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_2.txt'</span>;<span class="keyword">...</span>
+          <span class="string">'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_3.txt'</span>};
+
+<span class="comment">% pre-allocate data array - empty due to unknown length</span>
+data = [];
+
+<span class="comment">% loop files to load</span>
+<span class="keyword">for</span> ii = 1:length(fnames)
+    dat = dlmread(fnames{ii});  <span class="comment">% load data into temp array, dat</span>
+    data = [dat; data];         <span class="comment">% concat new file to running list</span>
+<span class="keyword">end</span>
+
+<span class="comment">% only keep first 28 channels (channels 29-32 not used)</span>
+data = data(:,1:28);
+</pre><h2>Sampling Info<a name="4"></a></h2><p>Temporal sampling info</p><pre class="codeinput">fs = 200;                       <span class="comment">% sampling frequnecy [hz]</span>
+dt = 1/fs;                      <span class="comment">% time step [seconds]</span>
+t = 0:dt:length(data)*dt-dt;    <span class="comment">% form time vector [seconds]</span>
+tMins = t./60;                  <span class="comment">% tim vector [minutes]</span>
+</pre><h2>DOF Indices, Coordinates, &amp; Labels<a name="5"></a></h2><p>Indices for vertical, transverse, and longitudinal DOF with corresponding DOF coordinates</p><p><b>Notes:</b></p><div><ul><li>Indices are the respective column index for data array</li></ul></div><div><ul><li>Strand7 model (0,0) starts at first right <b>interior</b> girder. These coordinates have the (0,0) starting at the first right <b>exterior</b> girder.</li></ul></div><pre class="codeinput"><span class="comment">% vertical dof indices</span>
+dof.vert.super = 1:18;
+dof.vert.sub   = [22 28];
+dof.vert.all = [dof.vert.super dof.vert.sub];
+
+<span class="comment">% transverse dof indices</span>
+dof.trans.sub = [19 24 27];
+
+<span class="comment">% longitudinal dof indices</span>
+dof.long.super = [20 21 23];
+dof.long.sub = [25 26];
+dof.long.all = [dof.long.super dof.long.sub];
+
+<span class="comment">% index for all dof</span>
+dof.all = [dof.vert.all dof.trans.sub dof.long.all];
+
+<span class="comment">% build dof legend</span>
+leg = cell(1,length(dof.all));
+<span class="keyword">for</span> ii = 1:length(leg)
+    leg{ii} = [<span class="string">'DOF: '</span> num2str(ii)];
+<span class="keyword">end</span>
+dof.labels = leg; <span class="comment">% assign to dof struct</span>
+
+<span class="comment">%</span>
+<span class="comment">% % grab general dimensions from model</span>
+<span class="comment">% oneSpanLength = 136.5;  % ft</span>
+<span class="comment">% oneSpanWidth = 67.3;    % ft</span>
+<span class="comment">% oneGirderLine = [.25 .5 .75 1.25] * oneSpan;</span>
+</pre><h2>Data Stats<a name="6"></a></h2><div><ul><li>Root mean squared (RMS) for each DOF</li><li>Find min and max RMS</li></ul></div><pre class="codeinput"><span class="comment">% get rms for each DOF</span>
+rmsRaw = getrms(data);
+<span class="comment">% loop to format</span>
+<span class="keyword">for</span> ii = 1:size(data,2);
+    rmsData{ii,1} = dof.labels{ii};
+    rmsData{ii,2} = rmsRaw(ii);
+<span class="keyword">end</span>
+<span class="comment">% display</span>
+disp(rmsData);
+
+<span class="comment">% get rms stats &amp; display</span>
+[Y,I] = min(rmsRaw);
+fprintf(<span class="string">'\n\nMinimum RMS - DOF %s - Value %s[g]\n'</span>,num2str(I),num2str(Y));
+
+[Y,I] = max(rmsRaw);
+fprintf(<span class="string">'Minimum RMS - DOF %s - Value %s[g]\n'</span>,num2str(I),num2str(Y));
+</pre><pre class="codeoutput">    'DOF: 1'     [0.0184]
+    'DOF: 2'     [0.0240]
+    'DOF: 3'     [0.0158]
+    'DOF: 4'     [0.0556]
+    'DOF: 5'     [0.0206]
+    'DOF: 6'     [0.0340]
+    'DOF: 7'     [0.0207]
+    'DOF: 8'     [0.0271]
+    'DOF: 9'     [0.0375]
+    'DOF: 10'    [0.0289]
+    'DOF: 11'    [0.0355]
+    'DOF: 12'    [0.0185]
+    'DOF: 13'    [0.0221]
+    'DOF: 14'    [0.0467]
+    'DOF: 15'    [0.0181]
+    'DOF: 16'    [0.0209]
+    'DOF: 17'    [0.0295]
+    'DOF: 18'    [0.0188]
+    'DOF: 19'    [0.0947]
+    'DOF: 20'    [0.0109]
+    'DOF: 21'    [0.0726]
+    'DOF: 22'    [0.0239]
+    'DOF: 23'    [0.0115]
+    'DOF: 24'    [0.0016]
+    'DOF: 25'    [0.0016]
+    'DOF: 26'    [0.0026]
+    'DOF: 27'    [0.0020]
+    'DOF: 28'    [0.0312]
+
+
+
+Minimum RMS - DOF 25 - Value 0.0015531[g]
+Minimum RMS - DOF 19 - Value 0.094686[g]
+</pre><h2>Time Plots - Vertical DOF<a name="7"></a></h2><pre class="codeinput"><span class="comment">% create figure w/ increased resolution (from default)</span>
+figWidth = 1120; <span class="comment">% pixels</span>
+figHeight = 840;
+rect = [0 50 figWidth figHeight];
+figure(<span class="string">'OuterPosition'</span>, rect)
+
+
+<span class="comment">% plot vertical superstructure</span>
+ind = dof.vert.super;
+plot(tMins,data(:,ind));
+title(<span class="string">'Vertical DOF - Superstructure'</span>);
+xlabel(<span class="string">'Time [seconds]'</span>)
+ylabel(<span class="string">'Acceleration [g]'</span>)
+ylim([-1 1])
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+
+<span class="comment">% plot vertical sub</span>
+ind = dof.vert.sub;
+plot(tMins,data(:,ind));
+title(<span class="string">'Vertical DOF - Pier Cap'</span>);
+xlabel(<span class="string">'Time [minutes]'</span>)
+ylabel(<span class="string">'Acceleration [g]'</span>)
+ylim([-1 1])
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_01.png" alt=""> <img vspace="5" hspace="5" src="I76_Ambient_Processing_02.png" alt=""> <h2>Time Plots - Transverse DOF<a name="8"></a></h2><pre class="codeinput"><span class="comment">% plot vertical superstructure</span>
+ind = dof.trans.sub;
+plot(tMins,data(:,ind));
+title(<span class="string">'Transverse DOF'</span>);
+xlabel(<span class="string">'Time [seconds]'</span>)
+ylabel(<span class="string">'Acceleration [g]'</span>)
+ylim([-1 1])
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_03.png" alt=""> <h2>Time Plots - Longitudinal DOF<a name="9"></a></h2><pre class="codeinput"><span class="comment">% plot vertical superstructure</span>
+ind = dof.long.super;
+plot(tMins,data(:,ind));
+title(<span class="string">'Longitudinal DOF - Superstructure'</span>);
+xlabel(<span class="string">'Time [seconds]'</span>)
+ylabel(<span class="string">'Acceleration [g]'</span>)
+ylim([-1 1])
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+
+<span class="comment">% plot vertical superstructure</span>
+ind = dof.long.sub;
+plot(tMins,data(:,ind));
+title(<span class="string">'Longitudinal DOF - Substructure'</span>);
+xlabel(<span class="string">'Time [seconds]'</span>)
+ylabel(<span class="string">'Acceleration [g]'</span>)
+ylim([-1 1])
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_04.png" alt=""> <img vspace="5" hspace="5" src="I76_Ambient_Processing_05.png" alt=""> <h2>Power Spectral Density (PSD) - Plot All<a name="10"></a></h2><p>Notes:</p><div><ul><li>Data record broken into 50 segments for averaging</li><li>75 percent overlap of each segment</li><li>Default nfft</li></ul></div><pre class="codeinput">nAvg = 50;  <span class="comment">% number of averages</span>
+perc = 75;  <span class="comment">% percent overlap</span>
+nfft = [];  <span class="comment">% use default nfft lines</span>
+
+<span class="comment">% get psd</span>
+[pxx,f] = getpsd(data,nAvg,perc,nfft,fs);
+
+<span class="comment">% display frequency resolution</span>
+fprintf(<span class="string">'Observable frequency range: 0-%s[Hz]\n'</span>,num2str(f(end)));
+fprintf(<span class="string">'Frequency resolution: %s[Hz]\n'</span>,num2str(f(2)));
+
+
+ind = 1:size(data,2);
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - All DOF'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><pre class="codeoutput">
+Power Spectral Density
+	DOF: 1
+	DOF: 2
+	DOF: 3
+	DOF: 4
+	DOF: 5
+	DOF: 6
+	DOF: 7
+	DOF: 8
+	DOF: 9
+	DOF: 10
+	DOF: 11
+	DOF: 12
+	DOF: 13
+	DOF: 14
+	DOF: 15
+	DOF: 16
+	DOF: 17
+	DOF: 18
+	DOF: 19
+	DOF: 20
+	DOF: 21
+	DOF: 22
+	DOF: 23
+	DOF: 24
+	DOF: 25
+	DOF: 26
+	DOF: 27
+	DOF: 28
+Observable frequency range: 0-100[Hz]
+Frequency resolution: 0.0061035[Hz]
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_06.png" alt=""> <h2>PSD - Plot Vertical<a name="11"></a></h2><pre class="codeinput"><span class="comment">% full freq plot</span>
+ind = dof.vert.super;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Vertical - Superstructure'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+
+<span class="comment">% zoom to narrow freq bandwidth</span>
+bnds = [1.5 5]; <span class="comment">% freq bnds</span>
+ind = dof.vert.super;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Vertical - Superstructure - Zoom'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+xlim(bnds)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+lh = get(gca,<span class="string">'children'</span>);   <span class="comment">% find line handles of current axes</span>
+set(lh,<span class="string">'linewidth'</span>,1);      <span class="comment">% set linewidth</span>
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+
+
+<span class="comment">% PIER CAP - full freq plot</span>
+ind = dof.vert.sub;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Vertical - Pier Cap'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+
+
+<span class="comment">% PIER CAP - zoom to narrow freq bandwidth</span>
+bnds = [1.5 10]; <span class="comment">% freq bnds</span>
+ind = dof.vert.sub;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Vertical - Pier Cap - Zoom'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+xlim(bnds)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+lh = get(gca,<span class="string">'children'</span>);   <span class="comment">% find line handles of current axes</span>
+set(lh,<span class="string">'linewidth'</span>,1);      <span class="comment">% set linewidth</span>
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_07.png" alt=""> <img vspace="5" hspace="5" src="I76_Ambient_Processing_08.png" alt=""> <img vspace="5" hspace="5" src="I76_Ambient_Processing_09.png" alt=""> <img vspace="5" hspace="5" src="I76_Ambient_Processing_10.png" alt=""> <h2>PSD - Plot Transverse<a name="12"></a></h2><pre class="codeinput"><span class="comment">% full freq plot</span>
+ind = dof.trans.sub;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Transverse'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_11.png" alt=""> <h2>PSD - Plot Longitudinal<a name="13"></a></h2><pre class="codeinput"><span class="comment">% full freq plot</span>
+ind = dof.long.super;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Longitudinal - Pier Cap'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+
+
+<span class="comment">% full freq plot</span>
+ind = dof.long.sub;
+plot(f,mag2db(pxx(:,ind)))
+title(<span class="string">'PSD - Longitudinal - Piers'</span>);
+xlabel(<span class="string">'Frequency [Hz]'</span>)
+ylabel(<span class="string">'Power [dB]'</span>)
+grid <span class="string">minor</span>
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = <span class="string">'Times'</span>;
+ah.FontSize = 18;
+snapnow
+</pre><img vspace="5" hspace="5" src="I76_Ambient_Processing_12.png" alt=""> <img vspace="5" hspace="5" src="I76_Ambient_Processing_13.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% I76 Ambient Vibration Monitoring - Data Processing
+% 
+% John DeVitis
+% July 28th, 2016
+%
+% vma fcns called:
+%   getrms
+%   getpsd
+%   getcpsd
+
+%% Superstructure Instrumentation Plan
+%
+% *Note* the DOF call outs - they are also the channel numbers (column
+% indices of the data array)
+% 
+% <<instrumentation_superstructure.png>>
+%
+
+%% Substructure Instrumentation
+%
+% *Pier G6:*
+%
+% <<instrumentation_pierG6.png>>
+%
+%
+%
+% *Pier G7:*
+%
+% <<instrumentation_pierG7.png>>
+%
+
+
+%% Load data files
+%
+% * Record starts at 1:16PM on July 27th, 2016
+% * Video began at ~1:45PM
+% * File names must be on Matlab's search path
+
+% list of file names (absolute path of where data is stored)
+fnames = {'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3.txt';...
+          'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_01.txt';...
+          'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_2.txt';...
+          'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_3.txt'};
+      
+% pre-allocate data array - empty due to unknown length
+data = []; 
+
+% loop files to load
+for ii = 1:length(fnames)
+    dat = dlmread(fnames{ii});  % load data into temp array, dat
+    data = [dat; data];         % concat new file to running list
+end
+
+% only keep first 28 channels (channels 29-32 not used)
+data = data(:,1:28);
+
+
+%% Sampling Info
+% Temporal sampling info
+
+fs = 200;                       % sampling frequnecy [hz]
+dt = 1/fs;                      % time step [seconds]
+t = 0:dt:length(data)*dt-dt;    % form time vector [seconds]
+tMins = t./60;                  % tim vector [minutes]
+
+
+%% DOF Indices, Coordinates, & Labels
+%
+% Indices for vertical, transverse, and longitudinal DOF with corresponding
+% DOF coordinates
+%
+% *Notes:*
+%
+% * Indices are the respective column index for data array
+% 
+% * Strand7 model (0,0) starts at first right *interior* girder. These
+% coordinates have the (0,0) starting at the first right *exterior* girder.
+
+% vertical dof indices
+dof.vert.super = 1:18;
+dof.vert.sub   = [22 28];
+dof.vert.all = [dof.vert.super dof.vert.sub];
+
+% transverse dof indices
+dof.trans.sub = [19 24 27];
+
+% longitudinal dof indices
+dof.long.super = [20 21 23];
+dof.long.sub = [25 26];
+dof.long.all = [dof.long.super dof.long.sub];
+
+% index for all dof
+dof.all = [dof.vert.all dof.trans.sub dof.long.all];
+
+% build dof legend
+leg = cell(1,length(dof.all));
+for ii = 1:length(leg)
+    leg{ii} = ['DOF: ' num2str(ii)];
+end
+dof.labels = leg; % assign to dof struct
+
+% 
+% % grab general dimensions from model
+% oneSpanLength = 136.5;  % ft
+% oneSpanWidth = 67.3;    % ft
+% oneGirderLine = [.25 .5 .75 1.25] * oneSpan;
+
+
+%% Data Stats
+%
+% * Root mean squared (RMS) for each DOF
+% * Find min and max RMS
+% 
+
+% get rms for each DOF
+rmsRaw = getrms(data);
+% loop to format
+for ii = 1:size(data,2);
+    rmsData{ii,1} = dof.labels{ii};
+    rmsData{ii,2} = rmsRaw(ii);
+end
+% display
+disp(rmsData);
+
+% get rms stats & display
+[Y,I] = min(rmsRaw);
+fprintf('\n\nMinimum RMS - DOF %s - Value %s[g]\n',num2str(I),num2str(Y));
+
+[Y,I] = max(rmsRaw);
+fprintf('Minimum RMS - DOF %s - Value %s[g]\n',num2str(I),num2str(Y));
+
+
+%% Time Plots - Vertical DOF
+%
+% 
+
+% create figure w/ increased resolution (from default)
+figWidth = 1120; % pixels
+figHeight = 840;
+rect = [0 50 figWidth figHeight];
+figure('OuterPosition', rect)
+
+
+% plot vertical superstructure
+ind = dof.vert.super;
+plot(tMins,data(:,ind));
+title('Vertical DOF - Superstructure');
+xlabel('Time [seconds]')
+ylabel('Acceleration [g]')
+ylim([-1 1])
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+% plot vertical sub
+ind = dof.vert.sub;
+plot(tMins,data(:,ind));
+title('Vertical DOF - Pier Cap');
+xlabel('Time [minutes]')
+ylabel('Acceleration [g]')
+ylim([-1 1])
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+%% Time Plots - Transverse DOF 
+%
+% 
+
+% plot vertical superstructure
+ind = dof.trans.sub;
+plot(tMins,data(:,ind));
+title('Transverse DOF');
+xlabel('Time [seconds]')
+ylabel('Acceleration [g]')
+ylim([-1 1])
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+%% Time Plots - Longitudinal DOF 
+%
+% 
+
+% plot vertical superstructure
+ind = dof.long.super;
+plot(tMins,data(:,ind));
+title('Longitudinal DOF - Superstructure');
+xlabel('Time [seconds]')
+ylabel('Acceleration [g]')
+ylim([-1 1])
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+% plot vertical superstructure
+ind = dof.long.sub;
+plot(tMins,data(:,ind));
+title('Longitudinal DOF - Substructure');
+xlabel('Time [seconds]')
+ylabel('Acceleration [g]')
+ylim([-1 1])
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+%% Power Spectral Density (PSD) - Plot All
+%
+% Notes:
+%
+% * Data record broken into 50 segments for averaging
+% * 75 percent overlap of each segment
+% * Default nfft
+%
+
+nAvg = 50;  % number of averages
+perc = 75;  % percent overlap
+nfft = [];  % use default nfft lines
+
+% get psd
+[pxx,f] = getpsd(data,nAvg,perc,nfft,fs);
+
+% display frequency resolution
+fprintf('Observable frequency range: 0-%s[Hz]\n',num2str(f(end)));
+fprintf('Frequency resolution: %s[Hz]\n',num2str(f(2)));
+
+
+ind = 1:size(data,2);
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - All DOF');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+%% PSD - Plot Vertical
+%
+%
+
+% full freq plot
+ind = dof.vert.super;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Vertical - Superstructure');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+% zoom to narrow freq bandwidth
+bnds = [1.5 5]; % freq bnds
+ind = dof.vert.super;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Vertical - Superstructure - Zoom');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+xlim(bnds) 
+grid minor
+legend(dof.labels(ind))
+lh = get(gca,'children');   % find line handles of current axes
+set(lh,'linewidth',1);      % set linewidth 
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+% PIER CAP - full freq plot
+ind = dof.vert.sub;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Vertical - Pier Cap');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+% PIER CAP - zoom to narrow freq bandwidth
+bnds = [1.5 10]; % freq bnds
+ind = dof.vert.sub;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Vertical - Pier Cap - Zoom');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+xlim(bnds) 
+grid minor
+legend(dof.labels(ind))
+lh = get(gca,'children');   % find line handles of current axes
+set(lh,'linewidth',1);      % set linewidth 
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+%% PSD - Plot Transverse
+%
+%
+
+% full freq plot
+ind = dof.trans.sub;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Transverse');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+%% PSD - Plot Longitudinal
+%
+%
+
+% full freq plot
+ind = dof.long.super;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Longitudinal - Pier Cap');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+% full freq plot
+ind = dof.long.sub;
+plot(f,mag2db(pxx(:,ind)))
+title('PSD - Longitudinal - Piers');
+xlabel('Frequency [Hz]')
+ylabel('Power [dB]')
+grid minor
+legend(dof.labels(ind))
+ah = gca;
+ah.FontName = 'Times';
+ah.FontSize = 18;
+snapnow
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>
