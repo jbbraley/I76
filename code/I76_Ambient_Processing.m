@@ -487,13 +487,13 @@ snapnow
 %
 % *Notes:*
 %
-% * Reference: DOF 18 
+% * Reference: DOF 
 % * Number of Averages: Data record broken into 50 segments for averaging
 % * Percent Overlap: 75 percent overlap of each segment
 % * NFFT: Default nfft
 %
 
-refInd = 14; % reference dof index
+refInd = 3; % reference dof index
 nAvg = 50;  % number of averages
 perc = 75;  % percent overlap
 nfft = [];  % use default nfft lines
@@ -556,33 +556,208 @@ snapnow
 ind = dof.vert.super;
 [pH,ff,pirf,tt] = getpH(data(:,ind),ind,fs,[]);
 
+% plot pirf
+ref = 1;
+ind = dof.vert.super;
+
+figure;
+plot(tt,pirf{ref}(:,ind));
+
+
+% grab usable time info (first 60 seconds)
+tend = find(t>60,1,'first');
+
+% pull out usable time window for each ref in pirf
+for ii = 1:length(pirf)
+    pirf{ii} = pirf{ii}(1:tend,:);
+end
+
+% get fft of new time window
+nfft = 2^nextpow2(size(pirf{1},1));
+ff = fs*(0:nfft/2)/nfft; % form freq vector 
+
+% loop refs and perform fft
+for ii = 1:length(pirf)
+    % fft of pirf for pseudoFRF of usable portion
+    pH{ii} = fft(pirf{ii},nfft);
+    % reduce to one-sided
+    pH{ii} = pH{ii}(1:(nfft/2)+1,:);
+end
+
+% plot usable time window
+figure
+plot(tt(1:length(pirf{ref})),pirf{ref})
+
+
+% plot pH
+ref = 1;
+ind = dof.vert.super;
+figure
+ah = axes;
+plot(ff,mag2db(abs(pH{ref}(:,ind))))
+xlim([1 10])
+grid minor
+title(['Pseudo Frequency Response Function - REF ' num2str(ref)]);
+xlabel('Frequency [Hz]');
+ylabel('[db]');
+ah.FontName = 'Times';
+ah.FontSize = 18;
+legend(dof.labels(ind))
+lh = get(ah,'children');
+set(lh,'linewidth',1);
+
+
+% loop refs to window new time record
+perc = 25; % percent final amplitude
+for ii = 1:length(pirf)
+    [outwin,rwin] = accelWin(pirf{ii},fs,perc);
+    pirf_win{ii} = outwin;
+end
+
+% loop references and perform fft
+for ii = 1:length(pirf_win)
+    % fft of pirf for pseudoFRF
+    pH_win{ii} = fft(pirf_win{ii},nfft);
+    % reduce to one-sided
+    pH_win{ii} = pH_win{ii}(1:(nfft/2)+1,:);
+end
+
+% plot window
+figure
+ah = axes;
+plot(t(1:tend),rwin)
+
+
+% plot pH
+ref = 1;
+ind = dof.vert.super;
+figure
+ah = axes;
+plot(ff,mag2db(abs(pH_win{ref}(:,ind))))
+xlim([1 10])
+grid minor
+title(['Pseudo Frequency Response Function - REF ' num2str(ref)]);
+xlabel('Frequency [Hz]');
+ylabel('[db]');
+ah.FontName = 'Times';
+ah.FontSize = 18;
+legend(dof.labels(ind))
+lh = get(ah,'children');
+set(lh,'linewidth',1);
+
+
+
+
+%% CMIF
+
+% for frf w/ correct indices
+ns = length(ff);
+no = length(dof.vert.super);
+ni = no;
+H = zeros(ns,no*ni);
+hInd = 1:no*ni;
+hInd = reshape(hInd,no,ni);
+for ii = 1:length(pH_win)
+    H(:,hInd(:,ii)) = pH_win{ii};
+end
+
+% convert to 3d format
+HH = frf_two2three(H,no,ni);
+
+% plot imag cmif
+[uu,ss,vv] = cmif_svd(imag(HH));
+fh = figure;
+ah = axes;
+bnds = [1 10];
+ah = cmif_plot(ah,f,ss,bnds,0,0);
+
 
 
 %% Mode Shape Plots - Vertical DOF - Superstructure ONLY
 %
 %
 
-% get frequency index 
-peakFreqs = [2.106 2.148 2.435 2.533 3.204 3.345 3.448 3.503 3.558];
-[~,peakInd] = searchVector(f,peakFreqs);
-
-% create figure w/ increased resolution (from default)
-figWidth = 1120; % pixels
-figHeight = 840;
-rect = [0 50 figWidth figHeight];
-figure('OuterPosition', rect)
+% % get frequency index (from cpsd)
+% peakFreqs = [2.106 2.148 2.435 2.533 3.204 3.345 3.448 3.503 3.558];
+% [~,peakInd] = searchVector(f,peakFreqs);
 
 
-mode = 2;
-scale = 25;
-xres = 50;
-yres = 25;
+% get frequency index (from pH/pirf)
+peakFreqs = [1.965 2.039 2.075 2.173 2.417 2.502 2.563 2.808 3.174 3.223...
+    3.54 3.577 3.613];
+[~,peakInd] = searchVector(ff,peakFreqs);
 
-U = normalizeMode(real(pxy(peakInd(mode),dof.vert.super))')
+% choose rank
+rank = ones(size(peakInd));
+
+
+% % create figure w/ increased resolution (from default)
+% figWidth = 1120; % pixels
+% figHeight = 840;
+% rect = [0 50 figWidth figHeight];
+% figure('OuterPosition', rect)
+figure
 ah = axes;
-plot_interpmode(ah,dof.coords(dof.vert.super,:),dof.bcoords,U,xres,yres,scale);
+for ii = 1:length(peakInd)
+    mode = ii;
+    scale = 25;
+    xres = 50;
+    yres = 25;
+
+    U = normalizeMode(uu(:,1,peakInd(mode)));
+
+    fh = figure;
+    ah = axes;
+    plot_interpmode(ah,dof.coords(dof.vert.super,:),dof.bcoords,U,xres,yres,scale);
+    title(ah,['Frequency: ' num2str(ff(peakInd(mode))) ' Hz'])
+end
 
 
+
+% single span plot
+
+span1 = [1 2 3 4 5 6 7 15 16];
+span2 = [8:14 17 18];
+
+span1bcoords = find(bcoords(:,2)>33,100);
+span2bcoords = find(bcoords(:,2)<33,100);
+
+
+pname = 'C:\Users\John\Desktop\I76\code\ModeShapePlots';
+mkdir(pname);
+
+
+for ii = 1:length(peakInd)
+    mode = ii;
+    scale = 25;
+    
+    xres = 30;
+    yres = 15;
+
+    U = normalizeMode(uu(:,1,peakInd(mode)));
+
+    fh = figure;
+    ah = axes;
+    
+    % span1
+    
+    plot_interpmode(ah,dof.coords(dof.vert.super(span1),:),...
+        dof.bcoords(span1bcoords,:),U(span1),xres,yres,scale);
+    hold on
+    plot_interpmode(ah,dof.coords(dof.vert.super(span2),:),...
+        dof.bcoords(span2bcoords,:),U(span2),xres,yres,scale);
+    title(ah,['Frequency: ' num2str(ff(peakInd(mode))) ' Hz'])
+    hold off
+    
+    fname = ['Mode ' num2str(mode) '.png'];
+    sname = fullfile(pname,fname);
+        
+    % clean up
+    print(fh,sname,'-dpng','-r0')  % save
+    cla(ah);                       % clear axes
+    fprintf('Done. \n')            % update user
+        
+end
 
 
 
