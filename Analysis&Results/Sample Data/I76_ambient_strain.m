@@ -7,9 +7,9 @@
 % filename
 fname = 'TOA5_20Hz_strain_data_3.dat';
 
-% read data skipping 89 rows and 1 col
-strain = csvread(fname,89,1);
-strain = strain(:,2:end); % index data only
+% read data skipping 89 rows and col's 1 and 2
+strainRaw = csvread(fname,89,2);
+
 
 % set labels
 dof.labels = {'BF MID G1' ...
@@ -25,13 +25,54 @@ dof.labels = {'BF MID G1' ...
               'CG - TOP' ...
               'CG - BOT'};
 
+% index channels
+ind = 1:length(dof.labels);  
+strainRaw = strainRaw(:,ind);
+
+
 %% Time info
 
 fs = 20;
 dt = 1/fs;
-t = 0:dt:length(strain)*dt-dt;
-
-%% Plot raw data
+t = 0:dt:length(strainRaw)*dt-dt;
 
 
 %% Zero by median
+med = median(strainRaw);
+strain = zeros(size(strainRaw));
+for ii = 1:size(strainRaw,2)
+    strain(:,ii) = strainRaw(:,ii) - med(ii);
+end
+
+
+
+%% Plot raw data
+figure
+plot(t,strainRaw)
+legend(dof.labels)
+
+
+
+%% Plot zero'd strain
+figure
+plot(t/60,strain)
+xlabel('Time [min]')
+ylabel('\mu\epsilon')
+set(gca,'FontSize',18)
+grid(gca,'minor')
+legend(dof.labels)
+ylim([-175 175])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
