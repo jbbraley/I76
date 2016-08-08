@@ -27,7 +27,7 @@ function fh = plot_interpmode_animate( coords,bcoords,z,xres,yres,sc)
     end
     
     % plot shape to axes
-    fh = figure;
+    fh = figure('units','normalized','outerposition',[0 0 1 1]);
     ah = subplot(2,1,2);
 %     mesh(ah,xInterp,yInterp,zInterp*sc);
     sh = surf(ah,xInterp,yInterp,zInterp(:,:,1)*sc);
@@ -68,15 +68,28 @@ function fh = plot_interpmode_animate( coords,bcoords,z,xres,yres,sc)
     dh = plot([xlim(1) xlim(1)],ylim,'color', 'k');
     
     %% Animate Data
-   
-    for ii = 1:size(z,1)
+   gif_file = 'test_gif.gif';
+    for ii = 1:5:size(z,1)
         % Shape animation
         set(sh,'ZData',zInterp(:,:,ii)*sc);
         set(dof_h,'ZData',z(ii,:)'*sc)
         % Time History Animation
         set(dh,'XData',[ii ii]);
         drawnow
-        pause(1/10)
+        pause(1/20)
+        
+        frame = getframe(fh);
+        im(:,:,:,ii) = frame2im(frame);
+      
+    end
+    for ii = 1:size(im,4)
+        
+        [imind,cm] = rgb2ind(im(:,:,:,ii),256);
+        if ii == 1;
+            imwrite(imind,cm,gif_file,'gif', 'Loopcount',inf);
+        else
+            imwrite(imind,cm,gif_file,'gif','WriteMode','append');
+        end
     end
 end
 

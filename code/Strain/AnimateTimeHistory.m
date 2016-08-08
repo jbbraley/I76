@@ -1,4 +1,4 @@
-data = dat_z{1}(4500:5500,2:13);
+data = dat_z{1}(4500:5000,2:13);
 
 fh = figure;
 
@@ -8,9 +8,6 @@ dof_coord = dlmread('C:\Users\John\Projects_Git\I76\Analysis&Results\Strain_DOF_
 
 % Index channels to be plotted:
 gird_chan = [1 2 3 5 7 8];
-
-z = data(230,gird_chan(1:4))';
-z(end+1) = mean(data(230,gird_chan(5:6)),2);
 coord = dof_coord(gird_chan(1:end-1),1:2);
 bcoord = bound_coord;
 xres = 10;
