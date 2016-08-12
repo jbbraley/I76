@@ -10,6 +10,8 @@
 
 [FHWA Steel Design for Fatigue](https://www.fhwa.dot.gov/bridge/steel/pubs/if12052/volume12.pdf)
 
+[Miner's Rule](http://www.weibull.com/hotwire/issue116/hottopics116.htm)
+
 ## Topics to be explored
 
 - number of cycles in 24 hrs

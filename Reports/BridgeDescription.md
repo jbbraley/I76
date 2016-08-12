@@ -1,5 +1,5 @@
 ## Test Structure Description
-![Photo of bridge elevation](/Images/structure_main.jpg)
+![Photo of bridge elevation](Images/structure_main.jpg)
 ### Description
 The viaduct was first constructed in 1952. The superstructure was replaced in 1986, while reusing the original piers and foundations. The structure runs along the banks of the Schuylkill River and carries the Schuylkill Expressway (I-76) with a total of four lanes of traffic. Bridge users have reported experiencing unusually high levels of vibration while on the structure.
 ### Network
@@ -12,7 +12,7 @@ The structural type is steel multi-girder. Eight girders run longitudinally, res
 ![Diagram of Bridge System](Images/elevation_system.png)
 ### Substructure and Bearings
 The concrete piers and abutments were constructed in 1952 and are all that remains of the original structure. They are supported by driven piles. Elastomeric bearing pads are installed on top of the piers and support the transverse box girders. Rocker bearings or pedestals are installed between the box girders and longitudinal girders at those locations which are in the center of continuous spans. Elastomeric bearings are installed between the box girder and the longitudinal girders at the remaining locations.
-![Bearings under Continuous Spans](/Images/RockerBearing.jpg)
+![Bearings under Continuous Spans](Images/RockerBearing.jpg)
 
 ### Condition
 Visually, the deck appears to be in good condition, with no major cracking visible. Minor damage was observed in some regions of the center concrete barrier. The girders appeared in excellent condition. No major rusting was observed, and the girders appeared well maintained. The access hatches on many of the box girders had been left open. Any ill effects from this could not be immediately observed. The piers exhibited very little efflorescence and virtually no spalling. Repairs had been performed on several piers, where an embedded drainage pipe had rusted and cause a portion of concrete to spall off.
