@@ -44,18 +44,19 @@
 % * File names must be on Matlab's search path
 
 % list of file names (absolute path of where data is stored)
-fnames = {'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3.txt';...
-          'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_01.txt';...
-          'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_2.txt';...
-          'C:\Users\John\Desktop\I76_data\I76_07272016_ambient3_3.txt'};
+pname = 'F:\I76\07282016_Data\';
+fnames = {'I76_07272016_ambient3.txt';...
+          'I76_07272016_ambient3_01.txt';...
+          'I76_07272016_ambient3_2.txt';...
+          'I76_07272016_ambient3_3.txt'};
       
 % pre-allocate data array - empty due to unknown length
 data = []; 
 
 % loop files to load
 for ii = 1:length(fnames)
-    dat = dlmread(fnames{ii});  % load data into temp array, dat
-    data = [dat; data];         % concat new file to running list
+    dat = dlmread([pname fnames{ii}]);  % load data into temp array, dat
+    data = cat(1,data,dat);         % concat new file to running list
 end
 
 % only keep first 28 channels (channels 29-32 not used)
