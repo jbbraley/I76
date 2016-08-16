@@ -34,7 +34,7 @@
 
 %% Import multiple data files
 pname = 'F:\I76\07282016_Data';      
-fname_base = 'I76_07282015_ambient_AM1';
+fname_base = 'I76_07282015_ambient_AM2';
 base_char = length(fname_base);
 fnames = dir(pname);
 
@@ -164,6 +164,10 @@ end
 
 save('FullRMS','RMS')
 
+load('FullRMS');
+tv = period:period:size(RMS,1)*period;
+figure
+plot(tv,RMS);
 
 
 

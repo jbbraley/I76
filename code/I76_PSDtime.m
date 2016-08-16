@@ -73,6 +73,9 @@ clear dat
 
 % only keep first 28 channels (channels 29-32 not used)
 data = data(:,1:28);
+% Remove overranges at beginning
+llimit = 4.938e+05;
+data = data(llimit:end,:);
 
 %% Sampling Info
 % Temporal sampling info
@@ -130,25 +133,27 @@ end
 dof.labels = leg; % assign to dof struct
 
 %% Get PSD for time intervals
-chan = 13; % Channel of interest
+chan = [13 14]; % Channel of interest
 
 
 time_step = 20; %Minutes
 tstp = time_step*60*fs; %records
-nAvg = 300;
+nAvg = 150;
 percOverlap = 75;
 
 window = floor(length(data)/nAvg);          % window length for nAvg
 noverlap = floor(percOverlap/100*window);
 
-[~,~,~,pxx,fc,tc] = spectrogram(data(:,chan),window,noverlap,[],fs);
     %'MinThreshold',-30);
+    pxx = [];
+    ff = [];
  for ii = 1:floor(size(data,1)/tstp) 
      interval = [(ii-1)*tstp+1 ii*tstp];
      dat = data(interval(1):interval(2),:);
      window = floor(length(dat)/nAvg);          % window length for nAvg
     noverlap = floor(percOverlap/100*window);
     [pxx(:,:,ii) ff(:,:,ii)] = getpsd(dat(:,chan),nAvg,percOverlap,[],fs);
+    RMS(ii,:) = getrms(dat);
  end
  
  figure
@@ -185,7 +190,13 @@ end
 % axis tight
 % view(0,90)
 % 
-
+figure
+plot(ff(:,1,1),mag2db(pxx(:,2,1)))
+hold all
+for ii = 2:size(pxx,3)
+    
+    plot(ff(:,1,ii), mag2db(pxx(:,2,ii)))
+end
 
 
 

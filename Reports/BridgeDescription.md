@@ -1,11 +1,10 @@
+# Introduction
 ## Test Structure Description
 ![Photo of bridge elevation](Images/structure_main.jpg)
 ### Description
 The viaduct was first constructed in 1952. The superstructure was replaced in 1986, while reusing the original piers and foundations. The structure runs along the banks of the Schuylkill River and carries the Schuylkill Expressway (I-76) with a total of four lanes of traffic. Bridge users have reported experiencing unusually high levels of vibration while on the structure.
 ### Network
-The bridge is located on a major highway and carries more than 57,000 vehicles a day with 4% truck traffic. The bridge spans an access road and a railroad (spans 9 & 10). Testing of this bridge will not require access in the vicinity of the railroad.
-
-![Location of bridge on map](Images/map_loc.png)
+The bridge is located between mile 338 and 339 of Interstate 76 (Schuylkill Expressway) and carries more than 57,000 vehicles a day with 4% truck traffic. The bridge spans an access road and a railroad (spans 9 & 10). Testing of this bridge will not require access in the vicinity of the railroad.
 ### Superstructure
 The structural type is steel multi-girder. Eight girders run longitudinally, resting on steel box girders that span transversely and are supported by the concrete piers. A reinforced concrete composite deck was cast in place, with a “raked” finish and no overlay. There is no skew. The bridge has eleven spans. The maximum span length is 140’-0”. The out-to-out width is 76’-6”. Three spans are simply supported, while the remaining eight are two-span continuous. Each span has five interior rows of X-framed diaphragms and chevron diaphragms over the piers.
 
@@ -30,3 +29,7 @@ Visually, the deck appears to be in good condition, with no major cracking visib
 |Superstructure Condition	| 7 (Good Condition)|
 |Substructure Condition	| 5 (Fair Condition)|
 |Sufficiency Rating	| 70|
+
+## Test Objectives
+Members of this group were notified by PenDOT officials that concerned bridge users had been reporting high vibration levels.
+It was the purpose of this testing effort to identify the nature of the vibrations and their magnitude. It is of secondary concern to identify if the levels of vibration are detrimental to the structure, and recommend methods of reducing the vibration if such is the case.
