@@ -1,6 +1,9 @@
 # Acceleration Results
+
 A total of 30 accelerometers were installed and more than 12 hours of data recorded. Data was sampled at 200 Hz which allows for identification of modes of vibration as high as 100 Hz.
+
 ## Time History
+
 The a low-pass filter was applied to the acceleration data in an effort to remove high frequency acceleration (above 20 Hz) from sources such as noise and member local modes that could cloud global vibration characteristics.
 The root mean square was calculated for every 20 minute period of the data to track the change in the level of excitation over time.
 
@@ -10,6 +13,7 @@ As can be seen from the above plot, the superstructure experiences relatively st
 The maximum RMS values for the superstructure range from 0.015 to 0.07 g. In contrast, the RMS values for the pier accelerometers did not exceed 0.003 g. This is due to the effectiveness of the bearings, isolating the pier from superstructure vibrations, and the comparatively large axial stiffness of the piers which limits (and effectively prevents) vertical pier acceleration: the direction for which the superstructure experiences the greatest vibration.  
 
 ## Vibration Characterization
+
 The acceleration data was analyzed using Fourier transform methods to extract information about the acceleration at specific frequencies.
 
 ![Cross Power Spectral Density of Superstructure DOFs](Images/CPSD_super.png)
