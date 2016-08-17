@@ -2,7 +2,7 @@
 
 [Bridge Description](BridgeDescription.html)
 
-[Test Activities](TestActivites.html)
+[Test Activities](TestActivities.html)
 
 [Acceleration Results](Acceleration_Results.html)
 
