@@ -2,4 +2,4 @@
 
 ## Reports
 
-[Report 1](Reports/index.md)
+[Report 1](Reports/index.html)
